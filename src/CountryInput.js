@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
+import {
+    BrowserRouter as Router,
+    Route, Redirect
+} from 'react-router-dom';
 import axios from 'axios';
+
+
 
 let countryNameArray = [];
 
@@ -9,7 +15,8 @@ class CountryInput extends Component {
         this.state = {
             addAListing: '',
             findACountry: '',
-            countryArray: []
+            countryArray: [],
+            redirectAddAListing: false
         }
     }
 
@@ -20,7 +27,7 @@ class CountryInput extends Component {
             url: `https://restcountries.eu/rest/v2/`
 
         }).then(res => {
-
+            
             res.data.map((item) => {
                 countryNameArray.push(item.name)
 
@@ -54,52 +61,76 @@ class CountryInput extends Component {
     // routes to adding a listing page
     handleSubmitAddListing = (e) => {
         e.preventDefault(e);
+        this.props.inputNewPlace(this.state.addAListing);
+        this.setState({
+            redirectAddAListing: true
+        })
+
+        
     }
 
 
 
     render() {
+        if (this.state.redirectAddAListing) {
+            return (<Redirect push to="/inputnewplace" />)
+        }
         return(
-            <div>
+       
+            <section className="countryInputSection">
+
+                {/* FIND A PLACE BY COUNTRY */}
                 <div className="findFoodOption">
                     <h2>Choose a country to view or browse from the list below</h2>
                     <select onChange={this.handleChangeFindCountry} name="countryToView" id="countryToView">
+                        {/* default blank option */}
                         <option value=""></option>
                         {
-                            
+                            // bring up all the countries
                             this.state.countryArray.map((item) => {
                                 return (
-                                    <option value={item}>{item}</option>
+                                    <option id={item} value={item}>{item}</option>
                                 )
                             })
 
                         }
                         
                     </select>
-                    <button onSubmit={this.handleSubmitFindFood}>Find</button>
+
+                    <button onClick={this.handleSubmitFindFood}>Find</button>
+                     
                 </div>
+                {/* END OF FIND A PLACE */}
+
+                {/* *********************************************** */}
                 
+                {/* ADD A NEW PLACE */}
                 <div className="addFoodPlaceOption">
                     <h2>I'd like to recommend some places I've loved</h2>
                     
                     <select onChange={this.handleChangeAddListing} name="addAListing" id="addAListing">
+                        {/* default blank option */}
                         <option value=""></option>
                         {
-
+                            // bring up all the countries
                             this.state.countryArray.map((item) => {
                                 return (
                                     <option value={item}>{item}</option>
                                 )
                             })
-
                         }
                     
                     </select>
 
-                    <button onSubmit={this.handleSubmitAddListing}>Add a Listing</button>
+                    
+                    <button onClick={this.handleSubmitAddListing}>Add A Listing</button>
+                    
                 </div>
+                {/* END OF ADD A NEW PLACE */}
 
-            </div>
+            </section>
+            
+           
         )
     }
 }

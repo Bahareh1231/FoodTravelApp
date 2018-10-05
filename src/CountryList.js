@@ -39,17 +39,12 @@ class CountryList extends Component {
     render() {
         return(
             <div>
-               
-                {
-                    this.state.countryArray.map((item) => {
-                        return (
-                            <div className="CountryBlock">
-                                <h3>{item}</h3>
-                                <ul></ul>
-                            </div>
-                        )
-                    })
-                }
+                   
+                <div className="CountryBlock">
+                    <h3></h3>
+                    <ul></ul>
+                </div>
+              
                 
 
             </div>
